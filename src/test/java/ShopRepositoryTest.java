@@ -27,4 +27,23 @@ public class ShopRepositoryTest {
             repository.remove(15);
         });
     }
+
+    @Test
+    public void shouldAddNonDuplicateProduct() {
+        repository.add(product1);
+        repository.add(product2);
+
+        Product[] expected = new Product[]{product1, product2};
+        Product[] actual = repository.findAll();
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldNotDuplicateExistentProduct() {
+        repository.add(product1);
+
+        Assertions.assertThrows(AlreadyExistsException.class, () -> {
+            repository.add(product1);
+        });
+    }
 }
